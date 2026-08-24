@@ -1,0 +1,150 @@
+/* 시스템 폰트만 사용 — 외부 폰트 요청 없이 빠르게 로드됩니다. */
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #666666;
+  --border: #e5e5e5;
+  --accent: #1a5fb4;
+  --up: #c0392b;
+  --down: #2a63b0;
+  --max-width: 760px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --fg: #e8e8e8;
+    --muted: #9a9a9a;
+    --border: #2a2d33;
+    --accent: #6fa8ff;
+    --up: #e07a6f;
+    --down: #7aa8e0;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.7;
+  font-size: 17px;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* 헤더 */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.site-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+}
+.site-nav a {
+  margin-left: 16px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.site-nav a:first-child { margin-left: 0; }
+
+main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
+
+/* 홈 */
+.home-intro { color: var(--muted); margin-bottom: 32px; }
+.home-section-title { font-size: 1.1rem; margin-bottom: 12px; }
+
+/* 글 목록 */
+.post-list { list-style: none; padding: 0; margin: 0; }
+.post-list-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.post-list-item a { display: flex; justify-content: space-between; gap: 12px; }
+.post-list-title { color: var(--fg); font-weight: 600; }
+.post-list-date { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+.post-list-desc { color: var(--muted); font-size: 0.92rem; margin: 6px 0 0; }
+
+/* 글 본문 */
+.post-header { margin-bottom: 24px; }
+.post-header h1 { font-size: 1.55rem; line-height: 1.4; margin: 0 0 8px; }
+.post-meta { color: var(--muted); font-size: 0.88rem; }
+.post-category {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.78rem;
+}
+
+.post-body h2 { font-size: 1.25rem; margin-top: 2em; }
+.post-body h3 { font-size: 1.08rem; margin-top: 1.6em; }
+.post-body img { max-width: 100%; height: auto; display: block; margin: 1.2em 0; border-radius: 4px; }
+.post-body blockquote {
+  margin: 1.2em 0;
+  padding: 0.4em 1em;
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+}
+
+/* 표 — 가로로 넘치면 페이지 전체가 아니라 표 안에서만 스크롤 */
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin: 1.2em 0;
+}
+.post-body table thead, .post-body table tbody { display: table; width: 100%; }
+.post-body th, .post-body td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.post-body th:first-child, .post-body td:first-child { text-align: left; white-space: normal; }
+.post-body thead th { color: var(--muted); font-weight: 600; border-bottom: 2px solid var(--border); }
+
+/* 광고 영역 */
+.ad-slot { margin: 2em 0; text-align: center; }
+
+/* 푸터 */
+.site-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.footer-inner { padding: 24px 0; }
+.footer-inner p { margin: 0 0 10px; }
+.disclaimer { line-height: 1.6; }
+.footer-links a { color: var(--muted); }
+.copyright-year { margin-top: 14px; }
+
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .post-header h1 { font-size: 1.32rem; }
+}

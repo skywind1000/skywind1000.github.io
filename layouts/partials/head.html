@@ -1,0 +1,26 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
+<meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | absURL }}" title="{{ .Site.Title }} RSS">
+<link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+<meta name="robots" content="index, follow">
+
+{{/* Open Graph / Twitter 카드 — 공유될 때 보이는 미리보기 */}}
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+{{ with .Resources.GetMatch "chart-*" }}
+<meta property="og:image" content="{{ .Permalink }}">
+{{ end }}
+<meta name="twitter:card" content="summary_large_image">
+
+{{/* 기사 하나에 대한 구조화 데이터 (검색결과 리치스니펫용) */}}
+{{ if and .IsPage (not .IsHome) }}
+{{ partial "seo-article.html" . }}
+{{ end }}
+
+{{ partial "adsense-head.html" . }}

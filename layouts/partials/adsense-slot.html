@@ -1,0 +1,10 @@
+{{/* client 값이 없으면 광고 영역 자체를 렌더링하지 않습니다. */}}
+{{ with .Site.Params.adsense.client }}
+<div class="ad-slot">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="{{ . }}"
+       data-ad-format="autorelaxed"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+{{ end }}

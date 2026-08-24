@@ -1,0 +1,20 @@
+{{ define "main" }}
+<section class="home-intro">
+  {{ .Content }}
+</section>
+
+<h2 class="home-section-title">최근 글</h2>
+<ul class="post-list">
+  {{ $posts := where .Site.RegularPages "Section" "posts" }}
+  {{ range first 12 $posts.ByDate.Reverse }}
+  <li class="post-list-item">
+    <a href="{{ .Permalink }}">
+      <span class="post-list-title">{{ .Title }}</span>
+      <span class="post-list-date">{{ .Date.Format "2006-01-02" }}</span>
+    </a>
+    {{ if .Description }}<p class="post-list-desc">{{ .Description }}</p>{{ end }}
+  </li>
+  {{ end }}
+</ul>
+<p><a href="{{ "/posts/" | relURL }}">전체 글 보기 →</a></p>
+{{ end }}

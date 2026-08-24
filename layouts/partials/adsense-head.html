@@ -1,0 +1,4 @@
+{{/* client 값이 없으면 아무것도 렌더링하지 않습니다 (AdSense 심사 전에는 항상 이 상태여야 합니다) */}}
+{{ with .Site.Params.adsense.client }}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ . }}" crossorigin="anonymous"></script>
+{{ end }}
