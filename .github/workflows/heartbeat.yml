@@ -1,0 +1,133 @@
+name: 발행 하트비트
+
+# 발행이 멈춘 것을 **집 밖에서** 감지합니다.
+#
+# 수집·작성·발행은 전부 개인 PC 에서 돕니다. 그 PC 가 꺼져 있으면 코드가 한
+# 줄도 돌지 않고, 실행이 없으니 실패 기록도 알림도 없습니다. 실제로
+# 2026-08-28(금) 수집이 그렇게 통째로 빠졌고 나흘 뒤에야 발견됐습니다.
+#
+# 안에서 감시하는 장치는 전부 같은 약점을 공유합니다 — PC 가 꺼지면 감시자도
+# 같이 꺼집니다. 그래서 감시는 밖에 있어야 하고, 이 저장소의 Actions 가 그
+# 자리로 가장 적합합니다: 이미 여기서 사이트를 빌드하고 있고, 추가 비용이
+# 없으며, 발행 결과물(글 파일)을 직접 볼 수 있습니다.
+
+on:
+  schedule:
+    # 11:00 KST (02:00 UTC). 전날 16:00 수집 → 발행이 끝났을 시간대입니다.
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  # 이보다 오래 새 글이 없으면 이상으로 봅니다.
+  #
+  # 한국 시장은 설·추석 연휴가 주말에 붙으면 5일까지 쉽니다(예: 2026-09-23 발행
+  # 뒤 24·25 추석, 26·27 주말 → 다음 발행 28일). 그래서 6일로 둡니다. 이 감시자는
+  # 정밀 측정기가 아니라 **최후의 안전망**이라, 하루 이틀 늦게 알더라도 거짓
+  # 경보로 사람이 알림을 무시하게 되는 쪽이 훨씬 나쁩니다.
+  STALE_DAYS: "6"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 최신 글 날짜 확인
+        id: check
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import datetime, os, pathlib, re
+
+          posts = pathlib.Path("content/posts")
+          entries = list(posts.iterdir()) if posts.is_dir() else []
+          # 슬러그는 YYYY-MM-DD-<묶음키> 형식입니다.
+          pattern = re.compile(r"^(\d{4}-\d{2}-\d{2})-")
+          dates = sorted(
+              m.group(1)
+              for p in entries if p.is_dir()
+              for m in [pattern.match(p.name)] if m
+          )
+
+          today = datetime.date.today()
+          limit = int(os.environ["STALE_DAYS"])
+
+          if not dates:
+              print("stale=true")
+              print("latest=(없음)")
+              print(f"age=-1")
+              raise SystemExit(0)
+
+          latest = dates[-1]
+          age = (today - datetime.date.fromisoformat(latest)).days
+          print(f"stale={'true' if age > limit else 'false'}")
+          print(f"latest={latest}")
+          print(f"age={age}")
+          print(f"count={len(dates)}")
+          PY
+
+      - name: 결과 출력
+        run: |
+          echo "최신 글: ${{ steps.check.outputs.latest }}"
+          echo "경과일: ${{ steps.check.outputs.age }}일 (기준 ${{ env.STALE_DAYS }}일)"
+          echo "이상 여부: ${{ steps.check.outputs.stale }}"
+
+      - name: 이상이면 이슈 생성
+        if: steps.check.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LATEST: ${{ steps.check.outputs.latest }}
+          AGE: ${{ steps.check.outputs.age }}
+        run: |
+          # 이미 열려 있는 같은 이슈가 있으면 새로 만들지 않습니다.
+          # 매일 도는 감시라, 중복을 막지 않으면 며칠 만에 이슈가 쌓여
+          # 정작 읽히지 않게 됩니다.
+          # 라벨이 없으면 gh issue create 가 실패합니다.
+          gh label create publishing-stalled --color D93F0B             --description "발행 하트비트가 감지한 발행 중단" 2>/dev/null || true
+
+          existing=$(gh issue list --label publishing-stalled --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            echo "이미 열린 이슈 #$existing 가 있어 새로 만들지 않습니다."
+            exit 0
+          fi
+
+          if [ "$AGE" = "-1" ]; then
+            body="발행된 글이 하나도 없습니다."
+          else
+            body="최신 글이 **$LATEST** 로 **${AGE}일** 지났습니다 (기준 ${STALE_DAYS}일)."
+          fi
+
+          gh issue create \
+            --title "발행이 멈춘 것 같습니다 (최신: $LATEST)" \
+            --label publishing-stalled \
+            --body "$body
+
+수집·작성·발행은 개인 PC 에서 돕니다. PC 가 꺼져 있었거나 파이프라인 어딘가가
+멈췄을 수 있습니다.
+
+확인 순서:
+
+1. \`python main.py --doctor\` — 수집 누락 거래일과 환경 상태
+2. \`python blog/data_pack.py\` — 데이터팩이 만들어지는지
+3. \`python blog/publisher.py --status\` — 발행 이력
+
+수집이 빠졌다면 다음 데일리 실행이 스스로 메웁니다(5일까지). 그보다 많이
+빠졌으면 백필 명령이 텔레그램으로 갔을 것입니다.
+
+*이 이슈는 발행 하트비트가 자동으로 만들었습니다. 발행이 재개되면 닫아 주세요.*"
+
+      - name: 정상이면 열린 이슈 닫기
+        if: steps.check.outputs.stale == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LATEST: ${{ steps.check.outputs.latest }}
+        run: |
+          # 발행이 재개되면 스스로 닫습니다. 사람이 닫아 주기를 기다리면
+          # 이슈가 남아 있는 상태가 정상인지 아닌지 구분되지 않습니다.
+          for n in $(gh issue list --label publishing-stalled --state open --json number --jq '.[].number'); do
+            gh issue comment "$n" --body "발행이 재개됐습니다 (최신 글: $LATEST). 자동으로 닫습니다."
+            gh issue close "$n"
+          done
