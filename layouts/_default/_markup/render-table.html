@@ -1,0 +1,49 @@
+{{- /*
+  표를 스크롤 상자로 감싸고, 열마다 정렬을 정합니다.
+
+  **감싸는 이유** — 감싸지 않으면 CSS 쪽에서 `table { display: block;
+  overflow-x: auto }` 로 넘침을 처리해야 하는데, 그러면 표가 더 이상 표가
+  아니게 되어 열 너비 계산이 멈춥니다. 그걸 되살리려고 `thead`·`tbody` 를
+  각각 `display: table` 로 만들면 **둘이 서로 다른 표가 되어 열 너비를
+  공유하지 않습니다** — 머리글의 "종목명" 폭과 본문의 "우리이앤엘하루틴" 폭이
+  따로 계산되어 열이 어긋납니다. 넘침은 바깥 상자가 맡고 표는 표로 둡니다.
+
+  **정렬을 여기서 정하는 이유** — 마크다운 표(`|---|---|`)에는 정렬 정보가
+  없어 Hugo 의 `.Alignment` 가 비어 있습니다. 그대로 두고 CSS 로 일괄 우측
+  정렬하면 종목명·주도종목 같은 이름까지 오른쪽에 붙어, 숫자 사이에 이름이
+  섞인 표가 됩니다. 첫 본문 행의 내용으로 열이 숫자인지 판정해 숫자는 오른쪽,
+  이름은 왼쪽으로 보냅니다.
+*/ -}}
+
+{{- $cls := slice -}}
+{{- if gt (len .TBody) 0 -}}
+  {{- range (index .TBody 0) -}}
+    {{- $text := trim (printf "%s" .Text) " " -}}
+    {{- /* append 는 슬라이스를 펼쳐 넣으므로 문자열 하나로 줄여 담습니다. */ -}}
+    {{- $isNum := findRE `^[-+]?[0-9][0-9,]*(\.[0-9]+)?$` $text 1 -}}
+    {{- $cls = $cls | append (cond (eq (len $isNum) 0) "txt" "num") -}}
+  {{- end -}}
+{{- end -}}
+
+<div class="table-scroll">
+  <table>
+    <thead>
+      {{- range .THead }}
+      <tr>
+        {{- range $i, $cell := . }}
+        <th class="{{ if lt $i (len $cls) }}{{ index $cls $i }}{{ else }}txt{{ end }}">{{ $cell.Text }}</th>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </thead>
+    <tbody>
+      {{- range .TBody }}
+      <tr>
+        {{- range $i, $cell := . }}
+        <td class="{{ if lt $i (len $cls) }}{{ index $cls $i }}{{ else }}txt{{ end }}">{{ $cell.Text }}</td>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </tbody>
+  </table>
+</div>
