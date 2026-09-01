@@ -7,7 +7,13 @@
   --accent: #1a5fb4;
   --up: #c0392b;
   --down: #2a63b0;
-  --max-width: 760px;
+  /* 본문 폭. 한글 17px 기준 한 줄에 47자쯤 들어가 읽기 편한 구간입니다.
+     표에 맞춰 이걸 1,150px 까지 넓히면 한 줄이 70자를 넘어 눈이 줄 끝에서
+     다음 줄 머리를 찾기 어려워집니다 — 그래서 본문은 좁게 두고 표만 넓힙니다. */
+  --max-width: 820px;
+  /* 표가 벌어져 나갈 최대 폭. 가장 넓은 표(거래량 급증, 11열)가 1,136px 이라
+     여유를 조금 둡니다. */
+  --table-max: 1180px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -112,9 +118,15 @@ main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
 /* 표 — 넘침은 바깥 상자가 맡고, 표는 표로 둡니다.
    (표 자체를 display:block 으로 만들면 열 너비 계산이 멈추고, 그걸 되살리려
    thead/tbody 를 각각 display:table 로 만들면 둘이 다른 표가 되어 열이 어긋납니다) */
+/* 표는 본문 폭을 넘어 좌우로 벌어집니다.
+   9~11열짜리 표를 820px 안에 우겨넣으면 늘 가로 스크롤이고, 반대로 본문을
+   표에 맞춰 넓히면 글줄이 70자를 넘습니다. 둘을 따로 두는 것이 답입니다.
+   화면이 좁으면 화면 폭까지만 벌어지고, 그때는 표 안에서 스크롤합니다. */
 .table-scroll {
+  --w: min(var(--table-max), calc(100vw - 40px));
+  width: var(--w);
+  margin: 1.2em 0 1.2em calc((100% - var(--w)) / 2);
   overflow-x: auto;
-  margin: 1.2em 0;
   -webkit-overflow-scrolling: touch;
 }
 .post-body table {
