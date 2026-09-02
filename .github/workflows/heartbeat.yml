@@ -82,42 +82,41 @@ jobs:
           LATEST: ${{ steps.check.outputs.latest }}
           AGE: ${{ steps.check.outputs.age }}
         run: |
-          # 이미 열려 있는 같은 이슈가 있으면 새로 만들지 않습니다.
-          # 매일 도는 감시라, 중복을 막지 않으면 며칠 만에 이슈가 쌓여
-          # 정작 읽히지 않게 됩니다.
           # 라벨이 없으면 gh issue create 가 실패합니다.
-          gh label create publishing-stalled --color D93F0B             --description "발행 하트비트가 감지한 발행 중단" 2>/dev/null || true
+          gh label create publishing-stalled --color D93F0B \
+            --description "발행 하트비트가 감지한 발행 중단" 2>/dev/null || true
 
-          existing=$(gh issue list --label publishing-stalled --state open --json number --jq '.[0].number')
+          # 이미 열려 있는 같은 이슈가 있으면 새로 만들지 않습니다. 매일 도는
+          # 감시라, 중복을 막지 않으면 며칠 만에 이슈가 쌓여 읽히지 않습니다.
+          existing=$(gh issue list --label publishing-stalled --state open \
+            --json number --jq '.[0].number')
           if [ -n "$existing" ]; then
             echo "이미 열린 이슈 #$existing 가 있어 새로 만들지 않습니다."
             exit 0
           fi
 
           if [ "$AGE" = "-1" ]; then
-            body="발행된 글이 하나도 없습니다."
+            headline="발행된 글이 하나도 없습니다."
           else
-            body="최신 글이 **$LATEST** 로 **${AGE}일** 지났습니다 (기준 ${STALE_DAYS}일)."
+            headline="최신 글이 **$LATEST** 로 **${AGE}일** 지났습니다 (기준 ${STALE_DAYS}일)."
           fi
+
+          # 본문은 printf 로 한 줄씩 만듭니다. 여러 줄 문자열을 그대로 쓰면
+          # 들여쓰기 없는 줄에서 YAML 블록 스칼라가 끊겨 파일 전체가 깨집니다
+          # (실제로 그래서 첫 실행이 startup 단계에서 실패했습니다).
+          body=$(printf '%s' "$headline")
+          body="$body$(printf '\n\n%s' '수집·작성·발행은 개인 PC 에서 돕니다. PC 가 꺼져 있었거나 파이프라인 어딘가가 멈췄을 수 있습니다.')"
+          body="$body$(printf '\n\n%s' '확인 순서:')"
+          body="$body$(printf '\n%s' '1. `python main.py --doctor` — 수집 누락 거래일과 환경 상태')"
+          body="$body$(printf '\n%s' '2. `python blog/daily.py --dry-run` — 데이터팩이 만들어지는지')"
+          body="$body$(printf '\n%s' '3. `python blog/publisher.py --status` — 발행 이력')"
+          body="$body$(printf '\n\n%s' '수집이 빠졌다면 다음 데일리 실행이 스스로 메웁니다(5일까지). 그보다 많이 빠졌으면 백필 명령이 텔레그램으로 갔을 것입니다.')"
+          body="$body$(printf '\n\n%s' '*발행 하트비트가 자동으로 만든 이슈입니다. 발행이 재개되면 스스로 닫습니다.*')"
 
           gh issue create \
             --title "발행이 멈춘 것 같습니다 (최신: $LATEST)" \
             --label publishing-stalled \
-            --body "$body
-
-수집·작성·발행은 개인 PC 에서 돕니다. PC 가 꺼져 있었거나 파이프라인 어딘가가
-멈췄을 수 있습니다.
-
-확인 순서:
-
-1. \`python main.py --doctor\` — 수집 누락 거래일과 환경 상태
-2. \`python blog/data_pack.py\` — 데이터팩이 만들어지는지
-3. \`python blog/publisher.py --status\` — 발행 이력
-
-수집이 빠졌다면 다음 데일리 실행이 스스로 메웁니다(5일까지). 그보다 많이
-빠졌으면 백필 명령이 텔레그램으로 갔을 것입니다.
-
-*이 이슈는 발행 하트비트가 자동으로 만들었습니다. 발행이 재개되면 닫아 주세요.*"
+            --body "$body"
 
       - name: 정상이면 열린 이슈 닫기
         if: steps.check.outputs.stale == 'false'
