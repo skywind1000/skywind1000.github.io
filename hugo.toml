@@ -18,6 +18,19 @@ copyright = "이 사이트의 표·차트·통계는 자체 수집 데이터베�
     # 빈 문자열이면 아무것도 렌더링하지 않습니다.
     client = ""
 
+  [params.verification]
+    # Google Search Console 소유권 확인용 토큰.
+    #
+    # search.google.com/search-console 에서 "URL 접두어" 방식으로
+    # https://skywind1000.github.io/ 를 등록하면, 확인 방법 중 "HTML 태그" 에서
+    #     <meta name="google-site-verification" content="AbCdEf...">
+    # 를 줍니다. 태그 전체가 아니라 **따옴표 안의 값만** 여기 넣고 push 하면
+    # 모든 페이지 <head> 에 태그가 붙습니다. 빈 문자열이면 아무것도 넣지 않습니다.
+    #
+    # 확인이 끝난 뒤에도 지우면 안 됩니다 — 구글이 주기적으로 다시 확인하고,
+    # 태그가 사라지면 소유권이 해제됩니다.
+    google = ""
+
 [taxonomies]
   category = "categories"
   tag = "tags"

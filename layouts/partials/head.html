@@ -7,6 +7,13 @@
 <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 <meta name="robots" content="index, follow">
 
+{{/* Search Console 소유권 확인. hugo.toml 의 params.verification.google 이
+     비어 있으면 아무것도 넣지 않습니다. 확인이 끝난 뒤에 지우면 소유권이
+     해제되므로 그대로 둡니다. */}}
+{{ with .Site.Params.verification.google }}
+<meta name="google-site-verification" content="{{ . }}">
+{{ end }}
+
 {{/* Open Graph / Twitter 카드 — 공유될 때 보이는 미리보기 */}}
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
