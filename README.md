@@ -16,8 +16,13 @@ GitHub Pages 로 서비스되며 커스텀 도메인 **https://skywind.kr/** 에
 | 저장소 Settings → Pages | Custom domain = `skywind.kr`. 도메인을 선점해 두는 자리이기도 합니다 — 먼저 등록하지 않고 DNS 만 걸어 두면 남이 자기 Pages 에 이 도메인을 붙여 가로챌 수 있습니다 |
 | `static/CNAME` | 배포 산출물에 들어가는 도메인 표시. Actions 배포라 저장소 루트가 아니라 여기 둡니다 |
 
-`hugo.toml` 의 `baseURL` 은 로컬 빌드용입니다. 배포 때는 워크플로가
-`actions/configure-pages` 에서 받은 값으로 덮어씁니다.
+주소는 `hugo.toml` 의 `baseURL` **한 곳에서만** 정합니다. 도메인을 또 바꾸면
+위 세 곳과 함께 여기도 고쳐야 합니다.
+
+예전에는 워크플로가 `actions/configure-pages` 가 주는 `base_url` 로 덮어썼는데,
+그 값은 **Enforce HTTPS 를 켜기 전까지 `http://` 를 반환합니다.** 검색엔진에
+넘기는 정본 주소가 설정 화면의 체크박스 상태에 따라 달라지면 안 되므로
+그 의존을 끊었습니다.
 
 ## 로컬에서 미리보기
 

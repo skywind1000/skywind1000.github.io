@@ -33,11 +33,15 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      # baseURL 은 hugo.toml 값을 씁니다. configure-pages 가 주는 base_url 은
+      # **Enforce HTTPS 를 켜기 전까지 http:// 를 반환합니다.** 실제로 그 값으로
+      # 빌드했더니 canonical 과 사이트맵이 전부 http://skywind.kr 로 나갔습니다.
+      # 검색엔진에 넘기는 정본 주소가 설정 화면의 체크박스 상태에 따라 달라지면
+      # 안 되므로, 주소는 hugo.toml 한 곳에서만 정합니다.
       - name: 빌드
         env:
           HUGO_ENVIRONMENT: production
-          HUGO_BASEURL: ${{ steps.pages.outputs.base_url }}
-        run: hugo --minify --baseURL "${HUGO_BASEURL}/"
+        run: hugo --minify
 
       - name: 빌드 결과 업로드
         uses: actions/upload-pages-artifact@v3
