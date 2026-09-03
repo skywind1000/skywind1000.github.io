@@ -5,8 +5,19 @@
 `layouts/` 에 직접 만든 최소 템플릿만 사용합니다 (외부 테마·Hugo 모듈
 의존성 없음).
 
-GitHub Pages 로 서비스되며, 저장소 이름이 `skywind1000.github.io` 이므로
-별도 설정 없이 `https://skywind1000.github.io/` 에서 바로 열립니다.
+GitHub Pages 로 서비스되며 커스텀 도메인 **https://skywind.kr/** 에서 열립니다.
+`https://skywind1000.github.io/` 로 들어오면 GitHub 이 301 로 넘겨 줍니다.
+
+도메인은 세 곳이 맞물려 있습니다. 하나라도 어긋나면 사이트가 안 열립니다.
+
+| 어디 | 무엇 |
+|------|------|
+| 등록대행사 DNS | apex 에 A 레코드 4개(185.199.108~111.153), `www` 는 CNAME → `skywind1000.github.io` |
+| 저장소 Settings → Pages | Custom domain = `skywind.kr`. 도메인을 선점해 두는 자리이기도 합니다 — 먼저 등록하지 않고 DNS 만 걸어 두면 남이 자기 Pages 에 이 도메인을 붙여 가로챌 수 있습니다 |
+| `static/CNAME` | 배포 산출물에 들어가는 도메인 표시. Actions 배포라 저장소 루트가 아니라 여기 둡니다 |
+
+`hugo.toml` 의 `baseURL` 은 로컬 빌드용입니다. 배포 때는 워크플로가
+`actions/configure-pages` 에서 받은 값으로 덮어씁니다.
 
 ## 로컬에서 미리보기
 
