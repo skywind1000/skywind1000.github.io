@@ -31,9 +31,11 @@ copyright = "이 사이트의 표·차트·통계는 자체 수집 데이터베�
     # 태그가 사라지면 소유권이 해제됩니다.
     google = ""
 
+# 태그(tag)는 쓰지 않으므로 켜 두지 않습니다. 켜 두면 글이 하나도 없는
+# /tags/ 페이지가 생기고 사이트맵에까지 올라가, 본문이 "Tags" 네 글자뿐인
+# 빈 페이지를 색인해 달라고 구글에 알리는 꼴이 됩니다.
 [taxonomies]
   category = "categories"
-  tag = "tags"
 
 [sitemap]
   changefreq = "daily"
