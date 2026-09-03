@@ -10,11 +10,13 @@
   <h2 class="home-section-title">가장 최근 글</h2>
   {{ partial "post-card.html" (dict "page" $latest "featured" true) }}
 
-  {{- /* 맨 위 한 편은 크게 이미 실었으므로 목록에서는 뺍니다. */ -}}
-  {{- $rest := after 1 (first 13 .) }}
+  {{- /* 맨 위 한 편은 크게 이미 실었으므로 목록에서는 뺍니다.
+         홈은 세 편까지만 두고, 그 이상은 전체 글 목록이 페이지로 나눕니다 —
+         홈까지 페이지를 나누면 /posts/ 와 같은 글을 두 계열로 나열하게 됩니다. */ -}}
+  {{- $rest := after 1 (first 4 .) }}
   {{- with $rest }}
   <h2 class="home-section-title">지난 글</h2>
-  <div class="card-grid">
+  <div class="card-grid card-grid-3">
     {{- range . }}
     {{ partial "post-card.html" (dict "page" .) }}
     {{- end }}

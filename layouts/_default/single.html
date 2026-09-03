@@ -14,4 +14,7 @@
 
   {{ partial "adsense-slot.html" . }}
 </article>
+
+{{/* 상설 페이지(/seasonality/)는 날짜순 계열이 아니라 앞뒤 글이 없습니다. */}}
+{{ if eq .Section "posts" }}{{ partial "post-nav.html" . }}{{ end }}
 {{ end }}

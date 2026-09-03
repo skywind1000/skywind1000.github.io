@@ -1,0 +1,47 @@
+{{- /*
+  글 하단의 이전·다음 글 링크.
+
+  Hugo 의 `.Prev`/`.Next` 는 컬렉션 정렬 순서를 따르므로 "이전" 이 더 새 글을
+  가리키는 일이 생깁니다. 날짜 오름차순 목록을 직접 만들고 자리를 찾아
+  앞뒤를 집습니다 — 무엇이 더 오래된 글인지 헷갈릴 여지가 없습니다.
+
+  상설 페이지(/seasonality/)는 날짜순 계열이 아니므로 이 partial 을 부르지
+  않습니다 (single.html 에서 섹션으로 걸러 냅니다).
+*/ -}}
+
+{{- $posts := (where .Site.RegularPages "Section" "posts").ByDate -}}
+{{- $idx := -1 -}}
+{{- range $i, $p := $posts -}}
+  {{- if eq $p.Permalink $.Permalink }}{{ $idx = $i }}{{ end -}}
+{{- end -}}
+
+{{- if ge $idx 0 }}
+{{- $older := cond (gt $idx 0) (index $posts (sub $idx 1)) false -}}
+{{- $newer := cond (lt $idx (sub (len $posts) 1)) (index $posts (add $idx 1)) false -}}
+{{- if or $older $newer }}
+<nav class="post-nav" aria-label="다른 글">
+  {{- with $older }}
+  <a class="post-nav-item post-nav-prev" href="{{ .Permalink }}">
+    <span class="post-nav-label">← 이전 글</span>
+    <span class="post-nav-meta">
+      {{ partial "badge.html" (dict "page" . "short" true) }}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+    </span>
+    <span class="post-nav-title">{{ .Title }}</span>
+  </a>
+  {{- else }}
+  <span class="post-nav-item post-nav-empty"></span>
+  {{- end }}
+  {{- with $newer }}
+  <a class="post-nav-item post-nav-next" href="{{ .Permalink }}">
+    <span class="post-nav-label">다음 글 →</span>
+    <span class="post-nav-meta">
+      {{ partial "badge.html" (dict "page" . "short" true) }}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+    </span>
+    <span class="post-nav-title">{{ .Title }}</span>
+  </a>
+  {{- end }}
+</nav>
+{{- end }}
+{{- end }}

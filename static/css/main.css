@@ -172,9 +172,61 @@ main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
+/* 홈의 "지난 글" 은 한 줄에 셋. 세 장이면 첫 화면에 대표 글까지 함께
+   들어오고, 그 이상은 전체 글 목록이 페이지로 나눕니다. */
+.card-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.card-grid-3 .card-title { font-size: 0.98rem; }
+.card-grid-3 .card-body { padding: 13px 14px 15px; }
+.card-grid-3 .card-desc { font-size: 0.86rem; }
+
+@media (max-width: 860px) {
+  .card-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 620px) {
-  .card-grid { grid-template-columns: 1fr; }
+  .card-grid, .card-grid-3 { grid-template-columns: 1fr; }
   .card-featured .card-title { font-size: 1.15rem; }
+}
+
+/* 글 하단 이전·다음 */
+.post-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 40px 0 8px;
+}
+.post-nav-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color 0.15s ease;
+}
+.post-nav-item:hover { border-color: var(--accent); text-decoration: none; }
+.post-nav-empty { border: none; }
+.post-nav-label { font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+.post-nav-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.post-nav-title {
+  color: var(--fg);
+  font-weight: 600;
+  font-size: 0.96rem;
+  line-height: 1.45;
+}
+/* 다음 글은 오른쪽 칸이라 오른쪽으로 정렬해 방향이 눈에 잡히게 합니다. */
+.post-nav-next { text-align: right; }
+.post-nav-next .post-nav-meta { justify-content: flex-end; }
+@media (max-width: 620px) {
+  .post-nav { grid-template-columns: 1fr; }
+  .post-nav-empty { display: none; }
+  .post-nav-next { text-align: left; }
+  .post-nav-next .post-nav-meta { justify-content: flex-start; }
 }
 
 /* 묶음 배지 — 발행 주기가 한눈에 구분됩니다. */
