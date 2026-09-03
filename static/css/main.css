@@ -188,6 +188,12 @@ main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
   background: var(--badge-bg, var(--border));
   color: var(--badge-fg, var(--fg));
 }
+/* 목록용 짧은 배지 — 폭을 고정해 제목 왼쪽 줄이 맞게 합니다. */
+.badge-short {
+  min-width: 3.4em;
+  padding: 2px 6px;
+  text-align: center;
+}
 .badge-daily     { --badge-bg: #e8f0fb; --badge-fg: #17518f; }
 .badge-weekly    { --badge-bg: #e4f2ea; --badge-fg: #16704e; }
 .badge-monthly   { --badge-bg: #efeafa; --badge-fg: #513795; }
@@ -203,14 +209,28 @@ main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
 
 /* 글 목록 (전체 글 페이지) */
 .post-list { list-style: none; padding: 0; margin: 0; }
+/* 배지를 따로 한 열로 세웁니다. 제목 안에 끼워 넣으면 배지 폭만큼 제목 시작
+   위치가 흔들리고, 설명 줄도 제목과 어긋납니다. */
 .post-list-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
   padding: 14px 0;
   border-bottom: 1px solid var(--border);
 }
+.post-list-item > .badge { margin-top: 4px; }
 .post-list-item a { display: flex; justify-content: space-between; gap: 12px; }
 .post-list-title { color: var(--fg); font-weight: 600; }
 .post-list-date { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
 .post-list-desc { color: var(--muted); font-size: 0.92rem; margin: 6px 0 0; }
+
+/* 좁은 화면에서는 날짜를 제목 아래로 내립니다. 한 줄에 같이 두면 제목이
+   날짜를 피해 감기면서 읽기가 답답해집니다. */
+@media (max-width: 620px) {
+  .post-list-item a { flex-direction: column; gap: 2px; }
+  .post-list-date { align-self: flex-start; }
+}
 
 /* 글 본문 */
 .post-header { margin-bottom: 24px; }

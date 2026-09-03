@@ -1,0 +1,31 @@
+{{- /*
+  묶음 배지. 홈 카드와 글 목록이 같이 씁니다.
+
+      {{ partial "badge.html" (dict "page" .) }}                 오늘의 시장
+      {{ partial "badge.html" (dict "page" . "short" true) }}    일간
+
+  촘촘한 목록에서는 짧은 라벨을 씁니다. 이름 길이가 제각각이면(오늘의 시장 /
+  분기 스크리닝) 배지 폭이 들쭉날쭉해 제목 왼쪽 줄이 맞지 않습니다.
+  짧은 라벨은 두 글자로 고정이라 그대로 한 열이 됩니다.
+
+  카테고리가 목록에 없으면 아무것도 그리지 않습니다 — 새 묶음이 생겼는데
+  여기 추가하는 걸 잊으면 회색 배지로 조용히 나가는 것보다 눈에 띕니다.
+*/ -}}
+
+{{- $short := .short | default false -}}
+{{- $map := dict
+      "오늘의 시장"   (slice "daily"     "일간")
+      "주간 리뷰"     (slice "weekly"    "주간")
+      "월간 리포트"   (slice "monthly"   "월간")
+      "분기 스크리닝" (slice "quarterly" "분기")
+-}}
+
+{{- $cat := "" -}}
+{{- with .page.Params.categories }}{{ $cat = index . 0 }}{{ end -}}
+{{- with $cat -}}
+  {{- with index $map . -}}
+    {{- $kind := index . 0 -}}
+    {{- $label := cond $short (index . 1) $cat -}}
+    <span class="badge badge-{{ $kind }}{{ if $short }} badge-short{{ end }}">{{ $label }}</span>
+  {{- end -}}
+{{- end -}}

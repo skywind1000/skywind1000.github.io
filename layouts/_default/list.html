@@ -7,11 +7,14 @@
 <ul class="post-list">
   {{ range .Paginator.Pages }}
   <li class="post-list-item">
-    <a href="{{ .Permalink }}">
-      <span class="post-list-title">{{ .Title }}</span>
-      <span class="post-list-date">{{ .Date.Format "2006-01-02" }}</span>
-    </a>
-    {{ if .Description }}<p class="post-list-desc">{{ .Description }}</p>{{ end }}
+    {{ partial "badge.html" (dict "page" . "short" true) }}
+    <div class="post-list-main">
+      <a href="{{ .Permalink }}">
+        <span class="post-list-title">{{ .Title }}</span>
+        <span class="post-list-date">{{ .Date.Format "2006-01-02" }}</span>
+      </a>
+      {{ if .Description }}<p class="post-list-desc">{{ .Description }}</p>{{ end }}
+    </div>
   </li>
   {{ end }}
 </ul>
