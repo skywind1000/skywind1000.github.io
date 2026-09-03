@@ -63,7 +63,7 @@ copyright = "이 사이트의 표·차트·통계는 자체 수집 데이터베�
     weight = 2
   # 상설 페이지 — 날짜순 글이 아니라 같은 주소를 갱신하는 참고 자료입니다.
   [[menu.main]]
-    name = "월별 계절성"
+    name = "계절성"
     url = "/seasonality/"
     weight = 3
   [[menu.main]]
