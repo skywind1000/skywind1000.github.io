@@ -78,10 +78,130 @@ a:hover { text-decoration: underline; }
 main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
 
 /* 홈 */
-.home-intro { color: var(--muted); margin-bottom: 32px; }
-.home-section-title { font-size: 1.1rem; margin-bottom: 12px; }
+.home-intro {
+  color: var(--muted);
+  margin-bottom: 40px;
+  padding-left: 16px;
+  border-left: 3px solid var(--border);
+}
+.home-intro p { margin: 0; }
 
-/* 글 목록 */
+/* 구분선을 제목에 붙여 목록이 어디서 시작하는지 눈에 잡히게 합니다. */
+.home-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: none;
+  margin: 40px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.home-section-title:first-of-type { margin-top: 0; }
+.home-more { margin-top: 32px; font-weight: 600; }
+
+/* 글 카드 — 글마다 붙어 있는 차트를 그대로 씁니다. 표와 차트가 이 사이트의
+   내용이므로, 목록에서도 그걸 보여 주는 편이 제목만 나열하는 것보다 낫습니다. */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+/* 썸네일 비율을 고정합니다. 차트마다 세로 길이가 크게 다릅니다 — 업종 등락은
+   막대가 24개라 거의 정사각형이고, 시장 폭은 납작합니다. 그대로 두면 카드
+   높이가 제각각이 됩니다. 순위표 차트는 위쪽이 곧 상위 항목이라 위를 기준으로
+   자릅니다. */
+.card-thumb {
+  display: block;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.card-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+.card-body { padding: 16px 18px 18px; }
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.card-title { margin: 0; font-size: 1.05rem; line-height: 1.45; }
+.card-title a { color: var(--fg); }
+.card-title a:hover { color: var(--accent); text-decoration: none; }
+.card-desc {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* 대표 글은 가로로 눕힙니다. 차트를 본문 폭 그대로 위에 얹으면 세로로 480px
+   가까이 차지해 정작 제목이 첫 화면 밖으로 밀려납니다. */
+.card-featured .card-title { font-size: 1.3rem; }
+@media (min-width: 700px) {
+  .card-featured { display: grid; grid-template-columns: 1.15fr 1fr; }
+  .card-featured .card-thumb {
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 230px;
+  }
+  .card-featured .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 22px 24px;
+  }
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+@media (max-width: 620px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .card-featured .card-title { font-size: 1.15rem; }
+}
+
+/* 묶음 배지 — 발행 주기가 한눈에 구분됩니다. */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--badge-bg, var(--border));
+  color: var(--badge-fg, var(--fg));
+}
+.badge-daily     { --badge-bg: #e8f0fb; --badge-fg: #17518f; }
+.badge-weekly    { --badge-bg: #e4f2ea; --badge-fg: #16704e; }
+.badge-monthly   { --badge-bg: #efeafa; --badge-fg: #513795; }
+.badge-quarterly { --badge-bg: #fbefdf; --badge-fg: #8d4e0d; }
+
+@media (prefers-color-scheme: dark) {
+  .card-thumb { background: #f4f4f4; }
+  .badge-daily     { --badge-bg: #16283f; --badge-fg: #8ab8f2; }
+  .badge-weekly    { --badge-bg: #143026; --badge-fg: #74cba3; }
+  .badge-monthly   { --badge-bg: #241f38; --badge-fg: #b49ceb; }
+  .badge-quarterly { --badge-bg: #33240f; --badge-fg: #e2ac68; }
+}
+
+/* 글 목록 (전체 글 페이지) */
 .post-list { list-style: none; padding: 0; margin: 0; }
 .post-list-item {
   padding: 14px 0;

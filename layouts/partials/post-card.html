@@ -1,0 +1,48 @@
+{{- /*
+  글 하나를 카드로 그립니다. 홈과 목록 페이지가 같이 씁니다.
+
+  `featured` 를 넘기면 차트를 크게 싣습니다 (홈 맨 위 한 편).
+
+      {{ partial "post-card.html" (dict "page" $p "featured" true) }}
+
+  차트는 글마다 이미 붙어 있는 것을 그대로 씁니다. 홈에 12편이 걸리는데
+  원본(1,680px, 60~100KB)을 그대로 내보내면 첫 화면에 1MB 가 넘게 실리므로
+  Hugo 로 줄여서 내보냅니다. 줄인 파일은 resources/ 에 캐시되고 그 폴더는
+  gitignore 대상이라, 배포 때 러너가 다시 만듭니다.
+*/ -}}
+
+{{- $p := .page -}}
+{{- $featured := .featured | default false -}}
+
+{{- /* 묶음마다 배지 색을 다르게 둡니다. 발행 주기가 한눈에 구분됩니다. */ -}}
+{{- $slugs := dict
+      "오늘의 시장" "daily"
+      "주간 리뷰" "weekly"
+      "월간 리포트" "monthly"
+      "분기 스크리닝" "quarterly" -}}
+{{- $cat := "" -}}
+{{- with $p.Params.categories }}{{ $cat = index . 0 }}{{ end -}}
+{{- $kind := or (index $slugs $cat) "etc" -}}
+
+<article class="card{{ if $featured }} card-featured{{ end }}">
+  {{- with partial "pick-chart.html" $p }}
+  {{- $w := cond $featured "900x" "560x" }}
+  {{- $thumb := .Resize $w }}
+  <a class="card-thumb" href="{{ $p.Permalink }}" aria-hidden="true" tabindex="-1">
+    {{- /* 대표 글 그림은 첫 화면에 들어오므로 지연 로딩을 걸지 않습니다 —
+           걸면 가장 큰 요소가 늦게 그려져 체감 속도가 나빠집니다. */ -}}
+    <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}"
+         alt=""{{ if not $featured }} loading="lazy"{{ end }} decoding="async"
+         {{ if $featured }}fetchpriority="high"{{ end }}>
+  </a>
+  {{- end }}
+
+  <div class="card-body">
+    <div class="card-meta">
+      {{- with $cat }}<span class="badge badge-{{ $kind }}">{{ . }}</span>{{ end }}
+      <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006년 1월 2일" }}</time>
+    </div>
+    <h3 class="card-title"><a href="{{ $p.Permalink }}">{{ $p.Title }}</a></h3>
+    {{- with $p.Description }}<p class="card-desc">{{ . }}</p>{{ end }}
+  </div>
+</article>
