@@ -313,9 +313,44 @@ main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
   font-size: 0.78rem;
 }
 
-.post-body h2 { font-size: 1.25rem; margin-top: 2em; }
-.post-body h3 { font-size: 1.08rem; margin-top: 1.6em; }
-.post-body img { max-width: 100%; height: auto; display: block; margin: 1.2em 0; border-radius: 4px; }
+/* 제목이 본문보다 1.18배(20px 대 17px)뿐이라 글이 한 덩어리로 보였습니다.
+   편집물에서 쓰는 1.5~1.6배로 벌립니다. */
+.post-body h2 {
+  font-size: 1.55rem;
+  line-height: 1.35;
+  margin: 2.4em 0 0.7em;
+  padding-top: 1.1em;
+  border-top: 1px solid var(--border);
+}
+.post-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.post-body h3 { font-size: 1.15rem; margin: 1.9em 0 0.5em; }
+
+/* 문단 간격(17px)이 줄간격(28.9px)보다 좁아 문단이 바뀌어도 안 끊겼습니다.
+   평균 140자 문단이 스물일곱 개 이어지면 벽이 됩니다. */
+.post-body p { margin: 0 0 1.35em; }
+
+/* 차트가 맨몸으로 얹혀 있어 본문에 묻혔습니다. 액자를 둘러 그림으로 보이게
+   하고, 다크모드에서 흰 사각형이 그대로 튀지 않도록 테두리로 가둡니다. */
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.8em 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+/* 본문의 등락률. 국내 증시 관습대로 오름은 빨강, 내림은 파랑입니다.
+   부호가 붙은 값에만 색이 들어갑니다 — 부호가 곧 방향을 주장하는 표시이고,
+   부호 없는 값에 색을 칠하면 자료에 없는 방향을 덧붙이는 셈입니다.
+   숫자 폭을 고정해 문단 안에서 줄이 흔들리지 않게 합니다. */
+.chg {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chg-up { color: var(--up); }
+.chg-down { color: var(--down); }
+
 .post-body blockquote {
   margin: 1.2em 0;
   padding: 0.4em 1em;
