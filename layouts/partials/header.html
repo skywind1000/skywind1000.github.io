@@ -15,7 +15,19 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="site-title" href="{{ $home }}">{{ .Site.Title }}</a>
+    <a class="site-title" href="{{ $home }}">
+      {{/* 마크는 인라인 SVG 입니다 — <img> 로 두면 페이지마다 요청이 하나 더
+           생기고, 첫 그리기에서 제목만 먼저 뜨는 순간이 보입니다. */}}
+      <svg class="site-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        {{/* 기준선을 먼저 그려 막대 뒤로 보냅니다 — 위에 그리면 막대를
+             가로질러 겹치는 자리가 탁해집니다. */}}
+        <rect x="2" y="15.5" width="28" height="1" rx=".5" fill="currentColor" opacity=".3"/>
+        <rect x="4"  y="5"  width="7" height="11" rx="1.5" fill="var(--up)"/>
+        <rect x="14" y="16" width="7" height="9"  rx="1.5" fill="var(--down)"/>
+        <rect x="24" y="10" width="6" height="6"  rx="1.5" fill="var(--up)"/>
+      </svg>
+      <span>{{ .Site.Title }}</span>
+    </a>
     <nav class="site-nav">
       {{- range .Site.Menus.main }}
       {{- $url := .URL | relURL }}
