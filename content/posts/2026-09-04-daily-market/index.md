@@ -6,6 +6,16 @@ description: "업종 흐름, 52주 신고가·신저가, 거래량이 터진 종
 categories: ["오늘의 시장"]
 draft: false
 sourcePack: "blog/output/2026-09-04/2026-09-04-daily-market/pack.json"
+strip:
+  - label: "업종 중위 등락률"
+    value: "+0.53%"
+    sign: "up"
+  - label: "52주 신고가"
+    value: "2개"
+    sign: ""
+  - label: "거래량 급증"
+    value: "13개"
+    sign: ""
 ---
 9월 4일 금요일 시장은 한쪽으로 기운 하루였습니다. 24개 업종을 중위 등락률로 줄 세워 보면 한가운데 놓인 값이 <span class="chg chg-up">+0.53%</span>, 그리고 24개 가운데 21개가 플러스입니다. 마이너스로 마감한 업종은 두 개뿐. 이 정도면 어느 업종을 골라 봐도 오른 종목이 더 많았던 날에 가깝습니다.
 
