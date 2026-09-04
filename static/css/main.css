@@ -435,3 +435,67 @@ main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
   body { font-size: 16px; }
   .post-header h1 { font-size: 1.32rem; }
 }
+
+/* ------------------------------------------------------------------
+   핵심 숫자 스트립 — 제목 바로 아래
+
+   본문을 읽지 않는 사람도 "오늘 시장 어땠나" 는 가져가게 하려는 줄입니다.
+   그래서 본문보다 크고, 본문과 구분되되, 제목을 이기지는 않아야 합니다.
+
+   칸 수는 1~3개입니다(계절성 1, 나머지 3). auto-fit 으로 두면 한 칸일 때
+   그 칸이 화면 전체로 늘어나 배너처럼 보이므로, 폭을 내용에 맡기고 왼쪽부터
+   채웁니다.
+   ------------------------------------------------------------------ */
+.num-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 1.6rem 0 2.2rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 칸이 하나뿐인 글(계절성)에서 띠가 화면을 가로지르면 숫자 하나짜리
+   배너처럼 보입니다. 그럴 때만 내용 너비로 줄입니다. */
+.num-strip:has(.num-strip-cell:only-child) {
+  display: inline-flex;
+  min-width: 12rem;
+}
+
+.num-strip-cell {
+  /* 0 을 기준으로 나눠 칸 너비를 균등하게 맞춥니다. auto 로 두면 라벨이 긴
+     칸이 넓어져 들쭉날쭉해집니다("업종 중위 등락률" 칸이 나머지의 1.4배). */
+  flex: 1 1 0;
+  min-width: 8.5rem;
+  padding: 0.85rem 1.1rem;
+  /* 칸 사이만 선이 생기게 — 바깥 테두리는 컨테이너가 그립니다. */
+  border-left: 1px solid var(--border);
+}
+.num-strip-cell:first-child { border-left: 0; }
+
+.num-strip dt {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: -0.01em;
+}
+
+.num-strip dd {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.15;
+  /* 자릿수가 달라도 칸 폭이 흔들리지 않게 합니다. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* 좁은 화면에서는 세 칸이 한 줄에 들어가지 않습니다. 두 칸씩 접히게 두면
+   마지막 칸만 아래에 홀로 남아 어색하므로, 아예 한 줄에 하나씩 쌓습니다. */
+@media (max-width: 480px) {
+  .num-strip { flex-direction: column; }
+  .num-strip-cell { border-left: 0; border-top: 1px solid var(--border); }
+  .num-strip-cell:first-child { border-top: 0; }
+  .num-strip dd { font-size: 1.3rem; }
+}
