@@ -5,6 +5,12 @@
 <link rel="canonical" href="{{ .Permalink }}">
 <link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | absURL }}" title="{{ .Site.Title }} RSS">
 <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+
+{{/* 아이콘. 그동안 아무것도 없어서 탭·북마크·검색결과에 빈 아이콘이 떴습니다.
+     SVG 는 최신 브라우저가 읽고, .ico 와 PNG 는 옛 브라우저와 iOS 홈 화면용입니다. */}}
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">
+<link rel="icon" type="image/svg+xml" href="{{ "mark.svg" | relURL }}">
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
 <meta name="robots" content="index, follow">
 
 {{/* Search Console 소유권 확인. hugo.toml 의 params.verification.google 이

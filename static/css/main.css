@@ -1,4 +1,25 @@
-/* 시스템 폰트만 사용 — 외부 폰트 요청 없이 빠르게 로드됩니다. */
+/* 본문은 시스템 폰트만 씁니다 — 외부 폰트 요청 없이 빠르게 로드됩니다.
+   웹폰트는 **제목 글자 열 개**에만 씁니다 (아래 @font-face).
+
+   본문까지 웹폰트로 바꾸는 것은 재 보고 접었습니다. 한글 웹폰트는 Regular
+   747KB + Bold 772KB 라 매 페이지에 1.5MB 가 붙는데, 이 사이트의 독자는
+   검색으로 들어오는 모바일 사용자이고 그 위에 광고까지 실립니다. 글자 모양을
+   얻자고 첫 그리기를 늦출 자리가 아닙니다.
+
+   대신 사이트 제목("한국 주식 데이터 리포트")의 고유 글자 열 개만 잘라
+   냈습니다 — 1,220바이트, 원본의 0.2%. 매 페이지 맨 위에 보이는 자리라
+   같은 값에 가장 크게 돌아오는 곳입니다. */
+@font-face {
+  font-family: "Wordmark";
+  src: url("../fonts/wordmark.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  /* 1.2KB 를 기다리느라 제목이 사라져 보이면 안 됩니다. 늦게 오면 시스템
+     폰트로 먼저 그리고 바꿔 그립니다. */
+  font-display: swap;
+  /* 잘라 낸 글자 밖(라틴·숫자 등)은 이 폰트를 쓰지 않게 못 박습니다. */
+  unicode-range: U+AD6D, U+B370, U+B9AC, U+C2DD, U+C774, U+C8FC, U+D130, U+D2B8, U+D3EC, U+D55C, U+0020;
+}
 :root {
   --bg: #ffffff;
   --fg: #1a1a1a;
@@ -64,8 +85,21 @@ a:hover { text-decoration: underline; }
   gap: 8px;
 }
 .site-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Wordmark", -apple-system, "Malgun Gothic", sans-serif;
   font-weight: 700;
   font-size: 1.1rem;
+  /* 잘라 낸 폰트는 자간이 조금 넓게 앉습니다. */
+  letter-spacing: -0.015em;
+  color: var(--fg);
+}
+.site-mark {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  /* 기준선이 currentColor 를 따라가 라이트·다크에서 함께 바뀝니다. */
   color: var(--fg);
 }
 .site-nav a {
@@ -434,4 +468,68 @@ main.container { padding-top: 32px; padding-bottom: 48px; min-height: 50vh; }
 @media (max-width: 480px) {
   body { font-size: 16px; }
   .post-header h1 { font-size: 1.32rem; }
+}
+
+/* ------------------------------------------------------------------
+   핵심 숫자 스트립 — 제목 바로 아래
+
+   본문을 읽지 않는 사람도 "오늘 시장 어땠나" 는 가져가게 하려는 줄입니다.
+   그래서 본문보다 크고, 본문과 구분되되, 제목을 이기지는 않아야 합니다.
+
+   칸 수는 1~3개입니다(계절성 1, 나머지 3). auto-fit 으로 두면 한 칸일 때
+   그 칸이 화면 전체로 늘어나 배너처럼 보이므로, 폭을 내용에 맡기고 왼쪽부터
+   채웁니다.
+   ------------------------------------------------------------------ */
+.num-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 1.6rem 0 2.2rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 칸이 하나뿐인 글(계절성)에서 띠가 화면을 가로지르면 숫자 하나짜리
+   배너처럼 보입니다. 그럴 때만 내용 너비로 줄입니다. */
+.num-strip:has(.num-strip-cell:only-child) {
+  display: inline-flex;
+  min-width: 12rem;
+}
+
+.num-strip-cell {
+  /* 0 을 기준으로 나눠 칸 너비를 균등하게 맞춥니다. auto 로 두면 라벨이 긴
+     칸이 넓어져 들쭉날쭉해집니다("업종 중위 등락률" 칸이 나머지의 1.4배). */
+  flex: 1 1 0;
+  min-width: 8.5rem;
+  padding: 0.85rem 1.1rem;
+  /* 칸 사이만 선이 생기게 — 바깥 테두리는 컨테이너가 그립니다. */
+  border-left: 1px solid var(--border);
+}
+.num-strip-cell:first-child { border-left: 0; }
+
+.num-strip dt {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: -0.01em;
+}
+
+.num-strip dd {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.15;
+  /* 자릿수가 달라도 칸 폭이 흔들리지 않게 합니다. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* 좁은 화면에서는 세 칸이 한 줄에 들어가지 않습니다. 두 칸씩 접히게 두면
+   마지막 칸만 아래에 홀로 남아 어색하므로, 아예 한 줄에 하나씩 쌓습니다. */
+@media (max-width: 480px) {
+  .num-strip { flex-direction: column; }
+  .num-strip-cell { border-left: 0; border-top: 1px solid var(--border); }
+  .num-strip-cell:first-child { border-top: 0; }
+  .num-strip dd { font-size: 1.3rem; }
 }

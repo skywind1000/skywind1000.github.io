@@ -6,6 +6,19 @@ description: "업종 흐름, 52주 신고가·신저가, 거래량이 터진 종
 categories: ["오늘의 시장"]
 draft: false
 sourcePack: "blog/output/2026-09-03/2026-09-03-daily-market/pack.json"
+strip:
+  - label: "업종 중위 등락률"
+    value: "-0.27%"
+    sign: "down"
+  - label: "52주 신고가"
+    value: "2개"
+    sign: ""
+  - label: "52주 신저가"
+    value: "5개"
+    sign: ""
+  - label: "거래량 급증"
+    value: "20개"
+    sign: ""
 ---
 9월 3일 시장은 한쪽으로 크게 쏠렸다기보다, 위아래가 또렷하게 갈린 하루였습니다. 24개 업종의 중위 등락률을 늘어놓고 한가운데 값을 보면 <span class="chg chg-down">-0.27%</span>. 크게 무너진 날은 아니지만, 오른 업종보다 내린 업종이 확실히 많았습니다. 양의 값을 기록한 업종이 6개, 음의 값이 14개니까 내린 쪽이 두 배가 넘습니다.
 

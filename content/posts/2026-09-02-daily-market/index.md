@@ -6,6 +6,19 @@ description: "업종 흐름, 52주 신고가·신저가, 거래량이 터진 종
 categories: ["오늘의 시장"]
 draft: false
 sourcePack: "blog/output/2026-09-02/2026-09-02-daily-market/pack.json"
+strip:
+  - label: "업종 중위 등락률"
+    value: "-1.47%"
+    sign: "down"
+  - label: "52주 신고가"
+    value: "1개"
+    sign: ""
+  - label: "52주 신저가"
+    value: "4개"
+    sign: ""
+  - label: "거래량 급증"
+    value: "20개"
+    sign: ""
 ---
 9월 2일 수요일 장을 데이터로 훑어봤습니다. 오늘 표를 한 장씩 넘기기 전에 먼저 눈에 들어오는 것은 색깔이 거의 한쪽으로 쏠려 있다는 점입니다. 24개 업종을 중위 등락률 순으로 줄 세웠는데, 맨 위에 놓인 섬유·의류조차 <span class="chg chg-down">-0.21%</span>였습니다. 다시 말해 오늘은 플러스로 마감한 업종이 하나도 없었다는 뜻입니다.
 

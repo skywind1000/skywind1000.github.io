@@ -6,6 +6,19 @@ description: "업종 흐름, 52주 신고가·신저가, 거래량이 터진 종
 categories: ["오늘의 시장"]
 draft: false
 sourcePack: "blog/output/2026-08-31/2026-08-31-daily-market/pack.json"
+strip:
+  - label: "업종 중위 등락률"
+    value: "-0.20%"
+    sign: "down"
+  - label: "52주 신고가"
+    value: "6개"
+    sign: ""
+  - label: "52주 신저가"
+    value: "2개"
+    sign: ""
+  - label: "거래량 급증"
+    value: "20개"
+    sign: ""
 ---
 8월 31일 월요일 장을 데이터로 훑어봅니다. 먼저 전체 그림부터 말하면, 이날은 조용히 눌린 하루였습니다. 24개 업종의 중위 등락률을 늘어놓았을 때 그 한가운데에 놓인 값이 <span class="chg chg-down">-0.20%</span>였고, 양(+)으로 마감한 업종은 2개, 음(-)은 17개였습니다. 지수 한 줄로는 "약보합" 정도로 요약될 흐름이지만, 업종 단위로 쪼개 보면 위아래 폭이 꽤 벌어져 있습니다.
 

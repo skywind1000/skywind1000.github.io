@@ -6,6 +6,19 @@ description: "업종 흐름, 52주 신고가·신저가, 거래량이 터진 종
 categories: ["오늘의 시장"]
 draft: false
 sourcePack: "blog/output/2026-09-01/2026-09-01-daily-market/pack.json"
+strip:
+  - label: "업종 중위 등락률"
+    value: "0.00%"
+    sign: ""
+  - label: "52주 신고가"
+    value: "6개"
+    sign: ""
+  - label: "52주 신저가"
+    value: "2개"
+    sign: ""
+  - label: "거래량 급증"
+    value: "20개"
+    sign: ""
 ---
 9월 1일 화요일 장이 끝났습니다. 오늘 시장은 한마디로 정리하기가 애매한 날이었습니다. 24개 업종 중 9개가 플러스, 11개가 마이너스였고, 업종 중위 등락률을 줄 세웠을 때 딱 가운데 놓인 값이 0%였습니다. 지수 한 방향으로 쏠린 날이 아니라, 업종별로 갈라진 날이라는 뜻입니다.
 
