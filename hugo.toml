@@ -13,9 +13,20 @@ copyright = "이 사이트의 표·차트·통계는 자체 수집 데이터베�
   defaultImage = ""
 
   [params.adsense]
-    # AdSense 심사 통과 후 발급받은 pub-XXXXXXXXXXXXXXXX 를 넣으면
-    # layouts/partials/adsense.html 이 자동으로 스크립트를 삽입합니다.
+    # 게시자 ID (pub-XXXXXXXXXXXXXXXX). 넣고 push 하면
+    # partials/adsense-head.html 과 adsense-slot.html 이 코드를 삽입합니다.
     # 빈 문자열이면 아무것도 렌더링하지 않습니다.
+    #
+    # **승인 전에 넣어야 합니다.** 순서가 헷갈리기 쉬운데, 게시자 ID 는
+    # 가입할 때 나오고 심사는 그 코드가 사이트에 올라가 있어야 시작됩니다.
+    # "승인되면 넣어야지" 하고 비워 두면 심사가 영영 시작되지 않습니다.
+    #
+    #   1. AdSense 가입 → 사이트로 skywind.kr 추가
+    #   2. 게시자 ID 발급 (여기 넣고 push)
+    #   3. AdSense 에서 "검토 요청"
+    #   4. 승인 또는 반려 (보통 며칠 ~ 2주)
+    #
+    # 심사를 기다리는 동안에는 광고 자리가 빈 채로 보입니다 — 정상입니다.
     client = ""
 
   [params.verification]
