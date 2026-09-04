@@ -2,10 +2,15 @@
 <article class="post">
   <header class="post-header">
     <h1>{{ .Title }}</h1>
+    {{/* 소개·문의·개인정보처리방침에는 날짜가 없습니다. 그대로 찍으면 Hugo 의
+         제로값이 "0001년 1월 1일" 로 나와 페이지가 깨진 것처럼 보입니다.
+         메타 줄에 넣을 것이 하나도 없으면 줄 자체를 그리지 않습니다. */}}
+    {{ if or (not .Date.IsZero) .Params.categories }}
     <p class="post-meta">
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
+      {{ if not .Date.IsZero }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>{{ end }}
       {{ range .Params.categories }}<span class="post-category">{{ . }}</span>{{ end }}
     </p>
+    {{ end }}
   </header>
 
   {{ partial "number-strip.html" . }}
