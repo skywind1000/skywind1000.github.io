@@ -56,7 +56,7 @@ copyright = "이 사이트의 표·차트·통계는 자체 수집 데이터베�
     # 확인 뒤에는 서치어드바이저에서 사이트맵(https://skywind.kr/sitemap.xml)
     # 을 제출하고, 수집 요청으로 개별 글을 밀어 넣을 수 있습니다 — 구글의
     # "색인 생성 요청" 보다 하루 한도가 넉넉합니다.
-    naver = "9cfc8f23e9532dc809c4af9bc94b1da061d07972"
+    naver = ""
 
     # Bing 웹마스터도구 (bing.com/webmasters). 국내 점유율은 낮지만 등록해
     # 두면 IndexNow 로 새 글을 즉시 알릴 수 있습니다 — 구글은 IndexNow 를
