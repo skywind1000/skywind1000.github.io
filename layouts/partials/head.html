@@ -13,11 +13,20 @@
 <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
 <meta name="robots" content="index, follow">
 
-{{/* Search Console 소유권 확인. hugo.toml 의 params.verification.google 이
-     비어 있으면 아무것도 넣지 않습니다. 확인이 끝난 뒤에 지우면 소유권이
-     해제되므로 그대로 둡니다. */}}
+{{/* 검색엔진 소유권 확인. hugo.toml 의 params.verification 값이 비어 있으면
+     아무것도 넣지 않습니다. 확인이 끝난 뒤에 지우면 소유권이 해제되므로
+     그대로 둡니다.
+
+     구글은 DNS TXT 방식으로 확인해 두어 여기가 비어 있어도 괜찮습니다.
+     한 쪽이 비어 있다고 다른 쪽까지 막히지 않도록 따로 감쌉니다. */}}
 {{ with .Site.Params.verification.google }}
 <meta name="google-site-verification" content="{{ . }}">
+{{ end }}
+{{ with .Site.Params.verification.naver }}
+<meta name="naver-site-verification" content="{{ . }}">
+{{ end }}
+{{ with .Site.Params.verification.bing }}
+<meta name="msvalidate.01" content="{{ . }}">
 {{ end }}
 
 {{/* Open Graph / Twitter 카드 — 공유될 때 보이는 미리보기 */}}
