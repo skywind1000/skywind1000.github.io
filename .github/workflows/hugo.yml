@@ -4,6 +4,13 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
+  # 글 머리말의 date 가 그날 16:10 이라, 그 전에 push 하면 이 빌드는 미래 날짜 글을
+  # 빼고 배포합니다(hugo 기본값, buildFuture 꺼짐). 2026-10-06 에 그렇게 글이 404
+  # 였고, 16:10 뒤 배포를 손으로 다시 돌려야 했습니다. 평일 16:15 KST(07:15 UTC)에
+  # 한 번 더 빌드해 그런 글이 저절로 올라오게 합니다. GitHub 예약 실행은 몇 분씩
+  # 늦게 뜰 수 있습니다.
+  schedule:
+    - cron: "15 7 * * 1-5"
 
 permissions:
   contents: read
