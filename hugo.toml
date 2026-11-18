@@ -13,21 +13,27 @@ copyright = "이 사이트의 표·차트·통계는 자체 수집 데이터베�
   defaultImage = ""
 
   [params.adsense]
-    # 게시자 ID (pub-XXXXXXXXXXXXXXXX). 넣고 push 하면
+    # 광고 코드의 client 값 (ca-pub-XXXXXXXXXXXXXXXX). 넣고 push 하면
     # partials/adsense-head.html 과 adsense-slot.html 이 코드를 삽입합니다.
     # 빈 문자열이면 아무것도 렌더링하지 않습니다.
+    #
+    # **앞에 "ca-" 가 붙은 값입니다.** 애드센스 화면의 게시자 ID 는 "pub-…" 로
+    # 보이지만, 애드센스가 주는 코드 스니펫의 client 는 "ca-pub-…" 입니다. 예전
+    # 주석이 "pub-…" 라고 적고 있어 그대로 넣었다면 사이트 확인이 실패했을
+    # 자리입니다. static/ads.txt 에는 반대로 "ca-" 없는 "pub-…" 를 씁니다.
     #
     # **승인 전에 넣어야 합니다.** 순서가 헷갈리기 쉬운데, 게시자 ID 는
     # 가입할 때 나오고 심사는 그 코드가 사이트에 올라가 있어야 시작됩니다.
     # "승인되면 넣어야지" 하고 비워 두면 심사가 영영 시작되지 않습니다.
     #
-    #   1. AdSense 가입 → 사이트로 skywind.kr 추가
-    #   2. 게시자 ID 발급 (여기 넣고 push)
+    #   1. AdSense 가입 → 사이트로 skywind.kr 추가       (2026-11-18)
+    #   2. 게시자 ID 발급 (여기 넣고 push)               (2026-11-18)
     #   3. AdSense 에서 "검토 요청"
     #   4. 승인 또는 반려 (보통 며칠 ~ 2주)
     #
     # 심사를 기다리는 동안에는 광고 자리가 빈 채로 보입니다 — 정상입니다.
-    client = ""
+    # 승인되면 content/privacy.md 2절의 "심사 중" 문장을 고칩니다.
+    client = "ca-pub-3379125631127781"
 
   [params.verification]
     # Google Search Console 소유권 확인용 토큰.
